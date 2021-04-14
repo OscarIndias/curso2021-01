@@ -3,8 +3,8 @@
 {
     "name": "helpdesk_oscarindias",
     "summary": "Modulo para crear tickets",
+    "description":"Helpdesk",
     "version": "1.0",
-    
     "category": "base",
     "website": "https://factorlibre.com/",
     "author": "Oscar Indias",
