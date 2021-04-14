@@ -2,8 +2,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 {
     "name": "helpdesk_oscarindias",
-    "summary": "Module summary",
-    "version": "11.0.1.0.0",
+    "summary": "Modulo para crear tickets",
+    "version": "1.0",
     
     "category": "base",
     "website": "https://factorlibre.com/",
