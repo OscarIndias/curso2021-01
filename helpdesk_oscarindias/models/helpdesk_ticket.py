@@ -7,7 +7,7 @@ class Helpdeskticket(models.Model):
     name = fields.Char(string = "name", required = True)
     description = fields.Text(string = "description")
     date = fields.Date(string = "fecha")
-    estado = fields.Selection(
+    state = fields.Selection(
         [('nuevo', 'Nuevo'), 
         ('asignado', 'Asignado'),
         ('proceso', 'En proceso'),
@@ -25,3 +25,32 @@ class Helpdeskticket(models.Model):
      help = 'Descrive corrective actions to do')
     action_preventive = fields.Html(string = 'Preventive Action',
      help = 'Descrive preventive actions to do')
+
+
+    # @api.model
+    # def close_leads(self):
+    #     active_tickets = self.search([('active', '=', True)])
+    #     for ticket in active_tickets:
+    #         ticket.close()
+
+    def do_assign(self):
+        self.ensure_one()
+        for ticket in self:
+            ticket.state = 'asignado'
+            ticket.assigned = True
+
+    def proceso(self):
+        self.ensure_one()
+        self.state = 'proceso'
+    
+    def pendiente(self):
+        self.ensure_one()
+        self.state = 'pendiente'
+
+    def resuelto(self):
+        self.ensure_one()
+        self.state = 'resuelto'
+
+    def cancelado(self):
+        self.ensure_one()
+        self.state = 'cancelado'

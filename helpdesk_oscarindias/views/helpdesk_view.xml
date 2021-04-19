@@ -6,7 +6,12 @@
         <field name="arch" type="xml">
             <form string="ticket">
                 <header>
-                    <field name = "estado" widget= "statusbar"/>
+                    <button string="Asignar" name="do_assign" type="object"  states = "nuevo"/>
+                    <button string="En proceso" name="proceso" type="object"  states = "asignado"/>
+                    <button string="Pendiente" name="pendiente" type="object"  states = "asignado,proceso"/>
+                    <button string="Finalizar" name="resuelto" type="object"  states = "nuevo,asignado,proceso,pendiente"/>
+                    <button string="Cancelar" name="cancelado" type="object"   attrs="{'invisible':[('state','=', 'cancelado')]}"/>
+                    <field name = "state" widget= "statusbar"/>
                 </header>
                 <sheet>
                     <div class = "oe_title">
@@ -18,6 +23,7 @@
                         <group>
                             <field name = "date"/>
                             <field name = "date_limit"/>
+                            <field name = "state"/>
                         </group>
                         <group>
                             <field name = "assigned"/>
@@ -48,7 +54,7 @@
                 <tree>
                     <field name="name" />
                     <field name="date" />
-                    <field name="estado" />
+                    <field name="state" />
                 </tree>
         </field>
     </record>
