@@ -102,9 +102,9 @@ class Helpdeskticket(models.Model):
 
     @api.depends('user_id')
     def _compute_ticket_qty(self):
-        for record in self:
-            other_tickets = self.env['helpdesk.ticket'].search([('user_id','=', record.user_id.id)])
-            record.ticket_qty = len(other_tickets)
+        #for record in self:
+        other_tickets = self.env['helpdesk.ticket'].search([('user_id','=', self.user_id.id)])
+        self.ticket_qty = len(other_tickets)
     
     tag_name = fields.Char(
         string='Tag Name')
