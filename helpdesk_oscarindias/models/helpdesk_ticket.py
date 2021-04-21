@@ -39,7 +39,7 @@ class Helpdeskticket(models.Model):
         comodel_name='res.users',
         string='user_id')
     
-
+    color = fields.Integer("color index")
     name = fields.Char(string = "name", required = True)
     description = fields.Text(string = "description")
     date = fields.Date(string = "fecha")
