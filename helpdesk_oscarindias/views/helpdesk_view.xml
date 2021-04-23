@@ -69,8 +69,10 @@
                 <field name = "user_id"/>
                 <filter string = "Assigned" name = "assigned" domain = "[('user_id','!=', False)]"/>
                 <filter string = "No date limit" name = "date_limit" domain = "[('date_limit','!=', False)]"/>
-                <filter string = "Date limit" name = "date_limit" domain = "{'group by':'date_limit'}"/>
-                <filter string = "Assigned to" name = "user_id" domain = "{'group by':'user_id'}"/>
+                <group string="Group by">
+                    <filter string = "Date limit" name = "date_limit" context = "{'group_by':'date_limit'}"/>
+                    <filter string = "Assigned to" name = "user_id" context = "{'group_by':'user_id'}"/>
+                </group>
             </search>
         </field>
     </record>
