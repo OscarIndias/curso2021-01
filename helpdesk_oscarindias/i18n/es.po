@@ -156,7 +156,7 @@ msgstr ""
 #. module: helpdesk_oscarindias
 #: model:ir.model.fields,field_description:helpdesk_oscarindias.field_helpdesk_ticket__action_preventive
 msgid "Preventive Action"
-msgstr ""
+msgstr "Accion preventiva"
 
 #. module: helpdesk_oscarindias
 #: model_terms:ir.ui.view,arch_db:helpdesk_oscarindias.view_helpdesk_ticket_form
@@ -196,7 +196,7 @@ msgstr "accion correctiva"
 #. module: helpdesk_oscarindias
 #: model_terms:ir.ui.view,arch_db:helpdesk_oscarindias.view_helpdesk_ticket_form
 msgid "action_preventive"
-msgstr ""
+msgstr "accion Preventiva"
 
 #. module: helpdesk_oscarindias
 #: model:ir.model.fields,field_description:helpdesk_oscarindias.field_helpdesk_ticket__description
