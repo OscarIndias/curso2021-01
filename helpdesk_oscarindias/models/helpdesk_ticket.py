@@ -1,4 +1,8 @@
-from odoo import models,fields, api
+from odoo import models,fields, api, _
+from odoo.exceptions import ValidationError
+from datetime import datetime
+from datetime import timedelta
+
 class helpdeskticketAction(models.Model):
     _name = 'helpdesk.ticket.action'
     _description = 'Action'
@@ -23,6 +27,10 @@ class helpdeskTicketTag(models.Model):
 class Helpdeskticket(models.Model):
     _name = "helpdesk.ticket"
     _description = "Ticket"
+
+    def _date_default_today(self):
+        return fields.Date.today()
+
     tag_ids = fields.Many2many(
         comodel_name='helpdesk.ticket.tag',
         relation='helpdesk_ticket_tag_rel',
@@ -42,7 +50,7 @@ class Helpdeskticket(models.Model):
     color = fields.Integer("color index")
     name = fields.Char(string = "name", required = True)
     description = fields.Text(string = "description")
-    date = fields.Date(string = "fecha")
+    date = fields.Date(string = "fecha", default = _date_default_today)
     state = fields.Selection(
         [('nuevo', 'Nuevo'), 
         ('asignado', 'Asignado'),
@@ -112,9 +120,9 @@ class Helpdeskticket(models.Model):
     def create_tag(self):
         self.ensure_one()
         #opcion 1
-        self.write({
-            'tag_ids': [(0,0,{'name': self.tag_name})]
-        })
+        # self.write({
+        #     'tag_ids': [(0,0,{'name': self.tag_name})]
+        # })
         # #opcion 2
         # tag = self.env['helpdesk.ticket.tag'].create({
         #     'name':sel.tag_name
@@ -129,6 +137,28 @@ class Helpdeskticket(models.Model):
         # self.write({
         #     'tag_ids': [(6,0,tag_id)]
         # })
-        self.tag_name = False
+        # self.tag_name = False
+        action = self.env.ref('helpdesk_oscarindias.create_tag_action').read()[0]
+        action['context'] = {
+            'default_name':self.tag_name,
+            'default_tag_ids':[(6,0,self.ids)]
+        }
+        return action
     
     
+    @api.constrains("time")
+    def time_constraint(self):
+        for ticket in self:
+            if ticket.time and ticket.time < 0:
+                raise ValidationError(_("The time can not be nagative"))
+
+
+
+    @api.onchange('date', 'time')
+    def _onchange_date(self):
+        self.date_limit = self.date and self.date + timedelta(hours=self.time)
+
+    @api.model
+    def cron_delete_tag(self):
+        tickets = sefl.search([('ticket_ids','=',False)])
+        tickets.unlink()

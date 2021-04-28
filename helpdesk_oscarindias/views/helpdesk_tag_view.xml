@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="view_helpdesk_ticket_tag_form" model="ir.ui.view">
             <field name="name">view.helpdesk_ticket_tag.form</field>
@@ -51,6 +51,20 @@
 
         <menuitem id="helpdesk_ticket_tag_menu" parent="helpdesk_menu_submenu"
             action="helpdesk_ticket_tag_action" sequence="20"/>
+
+        <record id="create_tag_action" model="ir.actions.act_window">
+        <field name="name">Create Tag</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">helpdesk.ticket.tag</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name = "target">new</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Tag
+            </p>
+        </field>
+    </record>
         
     </data>
-</openerp>
+</odoo>
