@@ -9,6 +9,8 @@ class helpdeskticketAction(models.Model):
 
     name = fields.Char()
     date = fields.Date()
+    time = fields.Float(
+        string='time')
     ticket_id = fields.Many2one(
         comodel_name='helpdesk.ticket',
         string='ticket')
@@ -66,7 +68,7 @@ class Helpdeskticket(models.Model):
         string= 'State',
         default= 'nuevo'
     )
-    time = fields.Float(string = 'Time')
+    time = fields.Float(string = 'Time', compute = '_get_time', inverse = '_set_time')
     assigned = fields.Boolean(string = 'Assigned',
      readonly=True)
     date_limit = fields.Date(string = 'Date Limit')
@@ -106,6 +108,25 @@ class Helpdeskticket(models.Model):
         string='ticket Qty',
         compute='_compute_ticket_qty')
 
+    @api.constrains("time")
+    def time_constraint(self):
+        for ticket in self:
+            if ticket.time and ticket.time < 0:
+                raise ValidationError(_("The time can not be nagative"))
+ 
+
+
+    @api.onchange('date', 'time')
+    def _onchange_date(self):
+        self.date_limit = self.date and self.date + timedelta(hours=self.time)
+
+
+    def _get_time(self):
+        
+
+    def _set_time(self):
+
+
     @api.depends('user_id')
     def _compute_ticket_qty(self):
         other_tickets = self.env['helpdesk.ticket'].search([('user_id','=', self.user_id.id)])
@@ -143,16 +164,6 @@ class Helpdeskticket(models.Model):
         return action  
     
     
-    @api.constrains("time")
-    def time_constraint(self):
-        for ticket in self:
-            if ticket.time and ticket.time < 0:
-                raise ValidationError(_("The time can not be nagative"))
- 
-
-
-    @api.onchange('date', 'time')
-    def _onchange_date(self):
-        self.date_limit = self.date and self.date + timedelta(hours=self.time)
+    
 
     
