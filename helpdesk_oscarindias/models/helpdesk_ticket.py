@@ -68,9 +68,9 @@ class Helpdeskticket(models.Model):
         string= 'State',
         default= 'nuevo'
     )
-    time = fields.Float(string = 'Time', compute = '_get_time', inverse = '_set_time')
+    time = fields.Float(string = 'Time', compute = '_get_time', inverse = '_set_time', search = '_search_time')
     assigned = fields.Boolean(string = 'Assigned',
-     readonly=True)
+     readonly=True, compute = "_compute_assigned")
     date_limit = fields.Date(string = 'Date Limit')
     action_corrective = fields.Html(string='Corrective Action',
      help = 'Descrive corrective actions to do')
@@ -98,15 +98,17 @@ class Helpdeskticket(models.Model):
     def cancelado(self):
         self.ensure_one()
         self.state = 'cancelado'
-
+    
+    ticket_qty = fields.Integer(
+            string='ticket Qty',
+            compute='_compute_ticket_qty')
+    
     @api.depends('user_id')
     def _compute_assigned(self):
         for record in self:
             record.assigned = self.user_id and True or False
 
-    ticket_qty = fields.Integer(
-        string='ticket Qty',
-        compute='_compute_ticket_qty')
+    
 
     @api.constrains("time")
     def time_constraint(self):
@@ -120,12 +122,22 @@ class Helpdeskticket(models.Model):
     def _onchange_date(self):
         self.date_limit = self.date and self.date + timedelta(hours=self.time)
 
-
+    @api.depends('action_ids.time')
     def _get_time(self):
-        
-
+        for record in self:
+            record.time = sum(self.action_ids.mapped('time'))
+            
     def _set_time(self):
-
+        for record in self:
+            time_now = sum(record.action_ids.mapped('time'))
+            next_time = record.time - time_now
+            if next_time:
+                data = {'name':'/', 'time': next_time, 'date': fields.date.today(), 'ticket_id':record.id}
+                self.env['helpdesk.ticket.action'].create(data)
+    
+    def _search_time(self, operator, value):
+        actions = self.env['helpdesk.ticket.action'].search([('time', operator,value)])
+        return [('id', 'in', actions.mapped('ticket_id').ids)]
 
     @api.depends('user_id')
     def _compute_ticket_qty(self):
@@ -135,7 +147,7 @@ class Helpdeskticket(models.Model):
     tag_name = fields.Char(
         string='Tag Name')
 
-    def create_tag(self):
+    def create_tag(self): 
         self.ensure_one()
         #opcion 1
         # self.write({

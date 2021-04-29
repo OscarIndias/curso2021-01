@@ -46,11 +46,13 @@
                                 <tree editable = "bottom">
                                     <field name = "name"></field>
                                     <field name = "date"></field>
+                                    <field name = "time"></field>
                                 </tree>
                                 <form>
                                     <group name = "action">
                                         <field name = "name"></field>
                                         <field name = "date"></field>
+                                        <field name = "time"></field>
                                     </group>
                                 </form>
                             </field>
