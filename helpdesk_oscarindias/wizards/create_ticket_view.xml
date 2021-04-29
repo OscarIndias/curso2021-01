@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_create_ticket_form" model="ir.ui.view">
+            <field name="name">view.create_ticket.form</field>
+            <field name="model">create.ticket</field>
+            <field name="arch" type="xml">
+                <form string="create ticket">
+                    <p class = "oe_grey">
+                    Ticket will be created with this tag
+                    </p>
+                    <group>
+                        <field name = "name"></field>
+                    </group>
+                    <footer>
+                        <button name = "CreateTicket" id = "CreateTicket" string = "create Tag" type = "object"></button>
+                        <button string = "cancel" class="btn-secondary" special = "cancel"></button>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="create_ticket_action" model="ir.actions.act_window">
+            <field name="name">create ticket</field>
+            <field name="res_model">create.ticket</field>
+            <field name="view_mode">form</field>
+            <field name = "target">new</field>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
