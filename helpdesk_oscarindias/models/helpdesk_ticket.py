@@ -24,6 +24,11 @@ class helpdeskTicketTag(models.Model):
         column2='ticket_id',
         string='tickets')
 
+    @api.model 
+    def cron_delete_tag(self):
+        tickets = self.search([('ticket_ids','=',False)])
+        tickets.unlink()
+
 class Helpdeskticket(models.Model):
     _name = "helpdesk.ticket"
     _description = "Ticket"
@@ -61,7 +66,7 @@ class Helpdeskticket(models.Model):
         string= 'State',
         default= 'nuevo'
     )
-    time = fields.Float(sting = 'Time')
+    time = fields.Float(string = 'Time')
     assigned = fields.Boolean(string = 'Assigned',
      readonly=True)
     date_limit = fields.Date(string = 'Date Limit')
@@ -69,13 +74,6 @@ class Helpdeskticket(models.Model):
      help = 'Descrive corrective actions to do')
     action_preventive = fields.Html(string = 'Preventive Action',
      help = 'Descrive preventive actions to do')
-
-
-    # @api.model
-    # def close_leads(self):
-    #     active_tickets = self.search([('active', '=', True)])
-    #     for ticket in active_tickets:
-    #         ticket.close()
 
     def do_assign(self):
         self.ensure_one()
@@ -110,7 +108,6 @@ class Helpdeskticket(models.Model):
 
     @api.depends('user_id')
     def _compute_ticket_qty(self):
-        #for record in self:
         other_tickets = self.env['helpdesk.ticket'].search([('user_id','=', self.user_id.id)])
         self.ticket_qty = len(other_tickets)
     
@@ -141,9 +138,9 @@ class Helpdeskticket(models.Model):
         action = self.env.ref('helpdesk_oscarindias.create_tag_action').read()[0]
         action['context'] = {
             'default_name':self.tag_name,
-            'default_tag_ids':[(6,0,self.ids)]
+            'default_ticket_ids':[(6,0,self.ids)]
         }
-        return action
+        return action  
     
     
     @api.constrains("time")
@@ -151,14 +148,11 @@ class Helpdeskticket(models.Model):
         for ticket in self:
             if ticket.time and ticket.time < 0:
                 raise ValidationError(_("The time can not be nagative"))
-
+ 
 
 
     @api.onchange('date', 'time')
     def _onchange_date(self):
         self.date_limit = self.date and self.date + timedelta(hours=self.time)
 
-    @api.model
-    def cron_delete_tag(self):
-        tickets = sefl.search([('ticket_ids','=',False)])
-        tickets.unlink()
+    
