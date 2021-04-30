@@ -12,7 +12,6 @@
                         </h1>
                         <field name="ticket_ids" />
                         <group name="public">
-                            <field name="public"/>
                             <button string="Create ticket"
                             name="%(helpdesk_oscarindias.create_ticket_action)d"
                             type="action"/>
