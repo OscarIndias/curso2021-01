@@ -98,6 +98,10 @@ class Helpdeskticket(models.Model):
     def cancelado(self):
         self.ensure_one()
         self.state = 'cancelado'
+
+    def cancelado_multi(self):
+        for record in self:
+            record.cancelado()
     
     ticket_qty = fields.Integer(
             string='ticket Qty',

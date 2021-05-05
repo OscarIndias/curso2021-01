@@ -101,6 +101,18 @@
         </field>
     </record>
 
+    <record id="view_helpdesk_ticket_tree" model="ir.ui.view">
+        <field name="name">view.helpdesk_ticket.tree</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <tree string= "tickets">
+                <field name = "name" />
+                <field name = "date"/>
+                <field name = "state"></field>
+            </tree>
+        </field>
+    </record>
+
     <record id="view_helpdesk_ticket_graph" model="ir.ui.view">
         <field name="name">view.helpdesk_ticket.graph</field>
         <field name="model">helpdesk.ticket</field>
