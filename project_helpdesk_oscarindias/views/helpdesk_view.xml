@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_helpdesk_ticket_form" model="ir.ui.view">
+        <field name="name">view.helpdesk_ticket.form</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name = "mode">primary</field>
+        <field eval = "7" name = "priority"></field>
+        <field name = "inherit_id" ref= "project.view_task_form2"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='project_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath> 
+            <notebook position="inside">
+                <page name="actions" string="Actions">
+                    <field name = "action_corrective" type = "html"></field>
+                    <field name = "action_preventive" type = "html"></field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+
+</odoo>
