@@ -34,6 +34,8 @@ class helpdeskTicketTag(models.Model):
 class Helpdeskticket(models.Model):
     _name = "helpdesk.ticket"
     _description = "Ticket"
+    _inherit = ['mail.thread.cc','mail.thread.blacklist', 'mail.activity.mixin']
+    _primary_email = 'email_from'
 
     def _date_default_today(self):
         return fields.Date.today()
@@ -76,6 +78,12 @@ class Helpdeskticket(models.Model):
      help = 'Descrive corrective actions to do')
     action_preventive = fields.Html(string = 'Preventive Action',
      help = 'Descrive preventive actions to do')
+
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='partner')
+    email_from = fields.Char(string = 'Email from')
+    
 
     def do_assign(self):
         self.ensure_one()

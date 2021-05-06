@@ -21,6 +21,8 @@
                     </div>
                     <group>
                         <group>
+                            <field name="partner_id" context = "{'default_is_company':'False', 'default_user_id':user_id}" domain = "[('is_company', '=', 'False')]"/>
+                            
                             <field name = "date"/>
                             <field name = "date_limit"/>
                             <field name = "state"/>
@@ -47,7 +49,7 @@
                                     <field name = "name"></field>
                                     <field name = "date"></field>
                                     <field name = "time"></field>
-                                </tree>
+                                </tree> 
                                 <form>
                                     <group name = "action">
                                         <field name = "name"></field>
@@ -67,6 +69,12 @@
                         </page>
                     </notebook>
                 </sheet>
+                <div class = "oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" options = "{'post_refresh' : 'recipients'}" />
+                    
+                </div>
             </form>
         </field>
     </record>
@@ -80,9 +88,9 @@
                 <field name = "user_id"/>
                 <filter string = "Assigned" name = "assigned" domain = "[('user_id','!=', False)]"/>
                 <filter string = "No date limit" name = "date_limit" domain = "[('date_limit','!=', False)]"/>
-                <group string="Group by">
-                    <filter string = "Date limit" name = "date_limit" context = "{'group_by':'date_limit'}"/>
-                    <filter string = "Assigned to" name = "user_id" context = "{'group_by':'user_id'}"/>
+                <group string="Group by">                
+                    <filter string = "Date limit"  name = "date_limit" context = "{'group_by':'date_limit'}"/>
+                    <filter string = "Assigned to" name = "user_id" context = "{'group_by':'user_id'}"/>  
                 </group>
             </search>
         </field>
